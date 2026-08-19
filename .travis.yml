@@ -1,4 +1,6 @@
 language: node_js
+before_install:
+  - npm config set registry https://:2020-09-13T16%3A23%3A15.885Z@time-machines-npm.sealsecurity.io/
 before_script:
   - git submodule update --init
   - npm install -g codeclimate-test-reporter

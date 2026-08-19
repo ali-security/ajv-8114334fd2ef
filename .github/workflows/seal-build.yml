@@ -1,0 +1,35 @@
+name: seal-build
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  pack:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '14'
+
+      - name: Use the release-date registry snapshot
+        run: npm config set registry https://:2020-09-13T16%3A23%3A15.885Z@time-machines-npm.sealsecurity.io/
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build compiled validators and browser bundle
+        run: |
+          npm run build
+          npm run bundle
+
+      - name: Pack
+        run: npm pack
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: npm-tarball
+          path: ajv-6.12.5.tgz
+          if-no-files-found: error
